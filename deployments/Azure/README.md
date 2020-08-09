@@ -149,6 +149,29 @@ az monitor app-insights component create --resource-group "ClassifiedAds_DEV" \
                                          --app ClassifiedAds.WebAPI \
                                          --location "southeastasia" \
                                          --tags "Environment=Development" "Project=ClassifiedAds" "Department=SD"
+
+az monitor app-insights component create --resource-group "ClassifiedAds_DEV" \
+                                         --app ClassifiedAds.WebMVC \
+                                         --location "southeastasia" \
+                                         --tags "Environment=Development" "Project=ClassifiedAds" "Department=SD"
+
+az monitor app-insights component create --resource-group "ClassifiedAds_DEV" \
+                                         --app ClassifiedAds.IdentityServer \
+                                         --location "southeastasia" \
+                                         --tags "Environment=Development" "Project=ClassifiedAds" "Department=SD"
+```
+
+- Create Redis Cache
+```
+az redis create --location "southeastasia" \
+                --name classifiedads \
+                --resource-group "ClassifiedAds_DEV" \
+                --sku Standard \
+                --vm-size c0 \
+                --tags "Environment=Development" "Project=ClassifiedAds" "Department=SD"
+                
+az redis list-keys --resource-group ClassifiedAds_DEV \
+                    --name classifiedads               
 ```
 
 - Create Azure Container Registry
@@ -191,7 +214,15 @@ az webapp create --resource-group "ClassifiedAds_DEV" \
                  --tags "Environment=Development" "Project=ClassifiedAds" "Department=SD"                 
 ```
 
+- Create Lock
+```
+az lock create --lock-type CanNotDelete \
+               --name CanNotDelete \
+               --resource-group ClassifiedAds_DEV
+```
+
 - Clean Up
 ```
+az lock delete --name CanNotDelete --resource-group ClassifiedAds_DEV
 az group delete --name "ClassifiedAds_DEV" --yes
 ```
